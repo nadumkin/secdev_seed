@@ -31,9 +31,8 @@ def search(q: str | None = None):
 
 @app.post("/login")
 def login(payload: LoginRequest):
-    # SQLi: обход авторизации через username="admin'-- " или password-инъекции
-    sql = f"SELECT id, username FROM users WHERE username = '{payload.username}' AND password = '{payload.password}'"
-    row = query_one(sql)
+    sql = "SELECT id, username FROM users WHERE username = ? AND password = ?"
+    row = query_one(sql, (payload.username, payload.password))
     if not row:
         raise HTTPException(status_code=HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
     # фиктивный токен
