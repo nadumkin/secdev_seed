@@ -3,6 +3,7 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from starlette.status import HTTP_401_UNAUTHORIZED
+from typing import Optional
 
 from .models import LoginRequest
 from .db import query, query_one
@@ -11,16 +12,16 @@ app = FastAPI(title="secdev-seed-s06-s08")
 templates = Jinja2Templates(directory="app/templates")
 
 @app.get("/", response_class=HTMLResponse)
-def index(request: Request, msg: str | None = None):
+def index(request: Request, msg: Optional[str] = None):
     # XSS: намеренно рендерим message без экранирования через шаблон (см. index.html)
     return templates.TemplateResponse("index.html", {"request": request, "message": msg or "Hello!"})
 
 @app.get("/echo", response_class=HTMLResponse)
-def echo(request: Request, msg: str | None = None):
+def echo(request: Request, msg: Optional[str] = None):
     return templates.TemplateResponse("index.html", {"request": request, "message": msg or ""})
 
 @app.get("/search")
-def search(q: str | None = None):
+def search(q: Optional[str] = None):
     if q:
         sql = "SELECT id, name, description FROM items WHERE name LIKE ?"
         return JSONResponse(content={"items": query(sql, (f"%{q}%",))})

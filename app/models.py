@@ -1,4 +1,6 @@
 from pydantic import BaseModel, Field, validator
+from typing import Optional
+
 
 class LoginRequest(BaseModel):
 
@@ -22,4 +24,4 @@ class LoginRequest(BaseModel):
 class Item(BaseModel):
     id: int
     name: str
-    description: str | None = None
+    description: Optional[str] = None
