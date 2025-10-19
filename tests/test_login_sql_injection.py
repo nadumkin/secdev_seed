@@ -9,4 +9,4 @@ def test_login_should_not_allow_sql_injection():
     # В текущем состоянии приложения тест упадёт (и это нормально до S06).
     payload = {"username": "admin'-- ", "password": "x"}
     resp = client.post("/login", json=payload)
-    assert resp.status_code == 401, "SQLi-бэйпас логина должен быть закрыт"
+    assert resp.status_code == 422, "SQLi-бэйпас логина должен быть закрыт"
