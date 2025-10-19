@@ -37,3 +37,10 @@ def login(payload: LoginRequest):
         raise HTTPException(status_code=HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
     # фиктивный токен
     return {"status": "ok", "user": row["username"], "token": "dummy"}
+
+@app.exception_handler(HTTPException)
+async def http_exception_handler(request: Request, exc: HTTPException):
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={"detail": exc.detail}
+    )
