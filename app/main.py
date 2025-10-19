@@ -21,12 +21,13 @@ def echo(request: Request, msg: str | None = None):
 
 @app.get("/search")
 def search(q: str | None = None):
-    # SQLi: намеренно подставляем строку без параметров
     if q:
-        sql = f"SELECT id, name, description FROM items WHERE name LIKE '%{q}%'"
+        sql = "SELECT id, name, description FROM items WHERE name LIKE ?"
+        return JSONResponse(content={"items": query(sql, (f"%{q}%",))})
     else:
         sql = "SELECT id, name, description FROM items LIMIT 10"
-    return JSONResponse(content={"items": query(sql)})
+        return JSONResponse(content={"items": query(sql)})
+
 
 @app.post("/login")
 def login(payload: LoginRequest):
