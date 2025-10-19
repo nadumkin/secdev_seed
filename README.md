@@ -12,14 +12,11 @@
 - pytest (+ httpx) для автотестов
 
 ## Быстрый старт (локально)
-> ⚠️ Тут приведён примерный порядок; **ваш one-liner** под DV вы сформулируете сами на S06.
+> **one-liner** под DV для  MacOS.
 
 ```bash
-python -m venv .venv
-. .venv/bin/activate  # Windows: .venv\Scripts\activate
-pip install -r requirements.txt
-python scripts/init_db.py
-uvicorn app.main:app --reload
+python3 -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt && pytest -q --junitxml=EVIDENCE/S06/test-report.xml && mkdir -p EVIDENCE/S06/logs && cp *.log EVIDENCE/S06/logs/
+
 ```
 
 Откройте: http://127.0.0.1:8000/  и попробуйте:
