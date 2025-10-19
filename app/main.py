@@ -31,12 +31,16 @@ def search(q: str | None = None):
 
 @app.post("/login")
 def login(payload: LoginRequest):
-    sql = "SELECT id, username FROM users WHERE username = ? AND password = ?"
-    row = query_one(sql, (payload.username, payload.password))
-    if not row:
-        raise HTTPException(status_code=HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
-    # фиктивный токен
-    return {"status": "ok", "user": row["username"], "token": "dummy"}
+    try:
+        sql = "SELECT id, username FROM users WHERE username = ? AND password = ?"
+        row = query_one(sql, (payload.username, payload.password))
+        if not row:
+            raise HTTPException(status_code=HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
+        return {"status": "ok", "user": row["username"], "token": "dummy"}
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))  # В случае ошибок валидации
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
 
 @app.exception_handler(HTTPException)
 async def http_exception_handler(request: Request, exc: HTTPException):
