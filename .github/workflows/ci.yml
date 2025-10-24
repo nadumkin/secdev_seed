@@ -62,7 +62,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: evidence-s08
+          name: evidence-s08-${{ matrix.python-version }}
           path: |
             EVIDENCE/S08/**
             coverage.xml
