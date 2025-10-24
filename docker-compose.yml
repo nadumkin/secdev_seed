@@ -14,3 +14,11 @@ services:
       interval: 10s
       timeout: 3s
       retries: 5
+    read_only: true
+    volumes:
+      - appdb:/app/app.db
+    cap_drop: [ "ALL" ]
+    security_opt:
+      - no-new-privileges:true
+volumes:
+  appdb:
