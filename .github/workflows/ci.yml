@@ -59,10 +59,20 @@ jobs:
       - name: Init DB
         run: python scripts/init_db.py
 
+      - name: Collect CI log
+        if: always()
+        run: |
+          echo "===== CI RUN INFO =====" > ci-log.txt
+          echo "Date: $(date)" >> ci-log.txt
+          echo "Commit: $GITHUB_SHA" >> ci-log.txt
+          echo "Branch: $GITHUB_REF" >> ci-log.txt
+          echo "Python: ${{ matrix.python-version }}" >> ci-log.txt
+          echo "========================" >> ci-log.txt
+
       - name: Run tests with coverage
         run: |
           mkdir -p EVIDENCE/S08
-          pytest -q --junitxml=EVIDENCE/S08/test-report.xml --cov=app --cov-report xml:coverage.xml
+          pytest -q --junitxml=test-report.xml --cov=app --cov-report xml:coverage.xml
         continue-on-error: false
 
       - name: Upload artifacts
@@ -71,7 +81,8 @@ jobs:
         with:
           name: evidence-s08-${{ matrix.python-version }}
           path: |
-            EVIDENCE/S08/**
+            test-report.xml
+            ci-log.txt
             coverage.xml
           if-no-files-found: warn
           retention-days: 14
