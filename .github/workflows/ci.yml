@@ -19,6 +19,10 @@ permissions:
   contents: read
   actions: read
 
+env:
+  APP_NAME: ${{ secrets.APP_NAME }}
+  PORT: ${{ secrets.PORT }}
+
 jobs:
   build-test:
     runs-on: ubuntu-latest

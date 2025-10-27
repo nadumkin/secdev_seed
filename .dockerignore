@@ -10,4 +10,4 @@ EVIDENCE/
 .git/
 .github/
 tests/
-app.db
+data

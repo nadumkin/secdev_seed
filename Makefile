@@ -1,7 +1,10 @@
 
-.PHONY: venv deps init run test ci
+.PHONY: seed
 
 PY?=python
+
+-include .env
+export
 
 venv:
 	$(PY) -m venv .venv

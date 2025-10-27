@@ -1,3 +1,4 @@
+import os
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import HTMLResponse, JSONResponse
@@ -7,8 +8,11 @@ from typing import Optional
 
 from .models import LoginRequest
 from .db import query, query_one
+import os
 
-app = FastAPI(title="secdev-seed-s06-s08")
+title = os.getenv("APP_NAME", "dev")
+
+app = FastAPI(title=title)
 templates = Jinja2Templates(directory="app/templates")
 
 @app.get("/", response_class=HTMLResponse)
